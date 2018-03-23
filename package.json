@@ -1,0 +1,25 @@
+{
+  "name": "swagger-utils",
+  "version": "0.1.0",
+  "description": "Generate HAR objects from Swagger specs",
+  "main": "index.js",
+  "dependencies": {
+    "json-schema-instantiator": "0.4.4"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.6.1",
+    "jest": "22.4.3",
+    "js-yaml": "^3.11.0",
+    "yaml-js": "^0.2.3"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "swagger",
+    "har",
+    "json"
+  ],
+  "author": "Darren Jennings",
+  "license": "MIT"
+}
