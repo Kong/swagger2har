@@ -1,5 +1,5 @@
-import swaggerToHar from './src/swagger-to-har.js';
+import swagger2har from "./src"
 
 export default {
-  swaggerToHar
+  swagger2har
 }

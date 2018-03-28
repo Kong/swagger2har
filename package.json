@@ -1,8 +1,11 @@
 {
-  "name": "swagger-utils",
+  "name": "swagger2har",
   "version": "0.1.0",
   "description": "Generate HAR objects from Swagger specs",
-  "main": "index.js",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
   "dependencies": {
     "json-schema-instantiator": "0.4.4"
   },
@@ -10,9 +13,19 @@
     "babel-preset-env": "^1.6.1",
     "jest": "22.4.3",
     "js-yaml": "^3.11.0",
+    "prettier": "^1.11.1",
+    "rollup": "^0.57.1",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-filesize": "^1.5.0",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.2.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-uglify": "^3.0.0",
     "yaml-js": "^0.2.3"
   },
   "scripts": {
+    "build": "rollup --config build/rollup.config.js",
     "test": "jest"
   },
   "keywords": [
