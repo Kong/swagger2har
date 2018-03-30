@@ -5,7 +5,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
+  "main": "dist/swagger2har.js",
   "dependencies": {
     "json-schema-instantiator": "0.4.4"
   },
