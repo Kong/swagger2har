@@ -8,7 +8,6 @@ test("swagger JSON converts to HAR", () => {
   const HARs = swagger2Har(petStore)
 
   const add_a_new_pet = HARs[0]
-
   expect(JSON.stringify(swagger2har_petstore_response)).toEqual(JSON.stringify(HARs))
 })
 
