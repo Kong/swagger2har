@@ -1,5 +1,5 @@
 {
-  "name": "@kong/swagger2har",
+  "name": "swagger2har",
   "version": "0.1.0",
   "description": "Generate HAR objects from Swagger specs",
   "files": [
