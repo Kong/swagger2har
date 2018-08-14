@@ -29,9 +29,13 @@ import instantiator from "json-schema-instantiator"
  * @param  {Object} swagger           Swagger document
  * @param  {string} path              Key of the path
  * @param  {string} method            Key of the method
+ * @param  {string} operation         Key of the operation
  * @param  {Object} queryParamValues  Optional: Values for the query parameters if present
  * @return {Object}                   HAR Request object
  */
+
+ var isOAS = false
+
 var createHar = function(swagger, path, method, queryParamValues) {
   // if the operational parameter is not provided, set it to empty object
   if (typeof queryParamValues === "undefined") {
@@ -193,7 +197,9 @@ var getQueryStrings = function(swagger, path, method, values) {
           value:
             typeof values[param.name] === "undefined"
               ? typeof param.default === "undefined"
-                ? "<SOME_" + param.type.toUpperCase() + "_VALUE>"
+                ? isOAS === true
+                  ? "<SOME_" + param.schema.type.toUpperCase() + "_VALUE>"
+                  : "<SOME_" + param.type.toUpperCase() + "_VALUE>"
                 : param.default + ""
               : values[param.name] + "" /* adding a empty string to convert to string */
         })
@@ -322,29 +328,47 @@ var getHeadersArray = function(swagger, path, method) {
  * @param  {Function} callback
  */
 var swagger2har = function(swagger) {
-  try {
 
+  try {
     if(swagger.openapi) {
-      const isOAS = true
+      isOAS = true
     }
     // determine basePath:
     var baseUrl = getBaseUrl(swagger)
 
-    // iterate over Swagger paths and create HAR objects
     var harList = []
-    Object.keys(swagger.paths).forEach(path => {
-      Object.keys(swagger.paths[path]).forEach(method => {
-        var url = baseUrl + path
-        var har = createHar(swagger, path, method)
-        harList.push({
-          path,
-          method: method.toUpperCase(),
-          url: url,
-          description: swagger.paths[path][method].description || "No description available",
-          har: har
+    // iterate over Swagger paths and create HAR objects
+    if(isOAS) {
+      Object.keys(swagger.paths).forEach(path => {
+        Object.keys(swagger.paths[path]).forEach(operation => {
+          var url = baseUrl + path
+          var har = createHar(swagger, path, operation)
+          harList.push({
+            path,
+            method: operation.toUpperCase(),
+            url: url,
+            description: swagger.paths[path][operation].description || "No description available",
+            har: har
+          })
         })
       })
-    })
+    } else {
+      Object.keys(swagger.paths).forEach(path => {
+        Object.keys(swagger.paths[path]).forEach(method => {
+          var url = baseUrl + path
+          var har = createHar(swagger, path, method)
+          harList.push({
+            path,
+            method: method.toUpperCase(),
+            url: url,
+            description: swagger.paths[path][method].description || "No description available",
+            har: har
+          })
+        })
+      })
+    }
+   
+    
 
     return harList
   } catch (e) {
