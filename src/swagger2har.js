@@ -142,6 +142,12 @@ var getResolvedSchema = function(swagger, schema) {
  */
 var getBaseUrl = function(swagger) {
   var baseUrl = ""
+
+  if (isOAS) {
+    baseUrl = swagger.servers[0].url
+    return baseUrl
+  } 
+
   if (typeof swagger.schemes !== "undefined") {
     baseUrl += swagger.schemes[0]
   } else {
@@ -317,6 +323,10 @@ var getHeadersArray = function(swagger, path, method) {
  */
 var swagger2har = function(swagger) {
   try {
+
+    if(swagger.openapi) {
+      const isOAS = true
+    }
     // determine basePath:
     var baseUrl = getBaseUrl(swagger)
 
