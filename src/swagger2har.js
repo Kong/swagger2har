@@ -148,8 +148,7 @@ var getBaseUrl = function(swagger) {
   var baseUrl = ""
 
   if (isOAS) {
-    baseUrl = swagger.servers[0].url
-    return baseUrl
+    return swagger.servers[0].url
   } 
 
   if (typeof swagger.schemes !== "undefined") {
