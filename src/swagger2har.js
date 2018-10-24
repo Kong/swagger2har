@@ -149,7 +149,7 @@ var getBaseUrl = function(swagger) {
 
   if (isOAS) {
     return swagger.servers[0].url
-  } 
+  }
 
   if (typeof swagger.schemes !== "undefined") {
     baseUrl += swagger.schemes[0]
@@ -262,40 +262,56 @@ var getHeadersArray = function(swagger, path, method) {
   var basicAuthDef
   var apiKeyAuthDef
   var oauthDef
-  if (typeof pathObj.security !== "undefined") {
-    for (var l in pathObj.security) {
-      var secScheme = Object.keys(pathObj.security[l])[0]
-      var authType = swagger.securityDefinitions[secScheme].type.toLowerCase()
-      switch (authType) {
-        case "basic":
-          basicAuthDef = secScheme
-          break
-        case "apikey":
-          if (swagger.securityDefinitions[secScheme].in === "query") {
-            apiKeyAuthDef = secScheme
-          }
-          break
-        case "oauth2":
-          oauthDef = secScheme
-          break
+
+  var secDefs = swagger.securityDefinitions || swagger.components && swagger.components.securitySchemes
+  if (secDefs) {
+    if (typeof pathObj.security !== "undefined") {
+      for (var l in pathObj.security) {
+        var secScheme = Object.keys(pathObj.security[l])[0]
+
+        var def = secDefs[secScheme]
+        if (!def || !def.type) {
+          continue
+        }
+
+        var authType = def.type.toLowerCase()
+        switch (authType) {
+          case "basic":
+            basicAuthDef = secScheme
+            break
+          case "apikey":
+            if (def.in === "query") {
+              apiKeyAuthDef = secScheme
+            }
+            break
+          case "oauth2":
+            oauthDef = secScheme
+            break
+        }
       }
-    }
-  } else if (typeof swagger.security !== "undefined") {
-    for (var m in swagger.security) {
-      var overallSecScheme = Object.keys(swagger.security[m])[0]
-      var overallAuthType = swagger.securityDefinitions[overallSecScheme].type.toLowerCase()
-      switch (overallAuthType) {
-        case "basic":
-          basicAuthDef = overallSecScheme
-          break
-        case "apikey":
-          if (swagger.securityDefinitions[overallSecScheme].in === "query") {
-            apiKeyAuthDef = overallSecScheme
-          }
-          break
-        case "oauth2":
-          oauthDef = overallSecScheme
-          break
+    } else if (typeof swagger.security !== "undefined") {
+      for (var m in swagger.security) {
+        var overallSecScheme = Object.keys(swagger.security[m])[0]
+
+        var def = secDefs[overallSecScheme]
+        if (!def || !def.type) {
+          continue
+        }
+
+        var overallAuthType = def.type.toLowerCase()
+        switch (overallAuthType) {
+          case "basic":
+            basicAuthDef = overallSecScheme
+            break
+          case "apikey":
+            if (def.in === "query") {
+              apiKeyAuthDef = overallSecScheme
+            }
+            break
+          case "oauth2":
+            oauthDef = overallSecScheme
+            break
+        }
       }
     }
   }
@@ -307,7 +323,7 @@ var getHeadersArray = function(swagger, path, method) {
     })
   } else if (apiKeyAuthDef) {
     headers.push({
-      name: swagger.securityDefinitions[apiKeyAuthDef].name,
+      name: secDefs[apiKeyAuthDef].name,
       value: "REPLACE_KEY_VALUE"
     })
   } else if (oauthDef) {
@@ -366,8 +382,8 @@ var swagger2har = function(swagger) {
         })
       })
     }
-   
-    
+
+
 
     return harList
   } catch (e) {
