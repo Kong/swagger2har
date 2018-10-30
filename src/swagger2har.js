@@ -34,8 +34,6 @@ import instantiator from "json-schema-instantiator"
  * @return {Object}                   HAR Request object
  */
 
- var isOAS = false
-
 var createHar = function(swagger, path, method, queryParamValues) {
   // if the operational parameter is not provided, set it to empty object
   if (typeof queryParamValues === "undefined") {
@@ -147,7 +145,7 @@ var getResolvedSchema = function(swagger, schema) {
 var getBaseUrl = function(swagger) {
   var baseUrl = ""
 
-  if (isOAS) {
+  if (swagger.openapi) {
     return swagger.servers[0].url
   }
 
@@ -196,7 +194,7 @@ var getQueryStrings = function(swagger, path, method, values) {
           value:
             typeof values[param.name] === "undefined"
               ? typeof param.default === "undefined"
-                ? isOAS === true
+                ? swagger.openapi
                   ? "<SOME_" + param.schema.type.toUpperCase() + "_VALUE>"
                   : "<SOME_" + param.type.toUpperCase() + "_VALUE>"
                 : param.default + ""
@@ -319,17 +317,13 @@ var getHeadersArray = function(swagger, path, method) {
  * @param  {Function} callback
  */
 var swagger2har = function(swagger) {
-
   try {
-    if(swagger.openapi) {
-      isOAS = true
-    }
     // determine basePath:
     var baseUrl = getBaseUrl(swagger)
 
     var harList = []
     // iterate over Swagger paths and create HAR objects
-    if(isOAS) {
+    if(swagger.openapi) {
       Object.keys(swagger.paths).forEach(path => {
         Object.keys(swagger.paths[path]).forEach(operation => {
           var url = baseUrl + path
