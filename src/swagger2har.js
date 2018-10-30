@@ -264,54 +264,30 @@ var getHeadersArray = function(swagger, path, method) {
   var oauthDef
 
   var secDefs = swagger.securityDefinitions || swagger.components && swagger.components.securitySchemes
-  if (secDefs) {
-    if (typeof pathObj.security !== "undefined") {
-      for (var l in pathObj.security) {
-        var secScheme = Object.keys(pathObj.security[l])[0]
+  var securityObj = pathObj.security || swagger.security
 
-        var def = secDefs[secScheme]
-        if (!def || !def.type) {
-          continue
-        }
+  if (secDefs && securityObj) {
+    for (var l in securityObj) {
+      var secScheme = Object.keys(securityObj[l])[0]
 
-        var authType = def.type.toLowerCase()
-        switch (authType) {
-          case "basic":
-            basicAuthDef = secScheme
-            break
-          case "apikey":
-            if (def.in === "query") {
-              apiKeyAuthDef = secScheme
-            }
-            break
-          case "oauth2":
-            oauthDef = secScheme
-            break
-        }
+      var def = secDefs[secScheme]
+      if (!def || !def.type) {
+        continue
       }
-    } else if (typeof swagger.security !== "undefined") {
-      for (var m in swagger.security) {
-        var overallSecScheme = Object.keys(swagger.security[m])[0]
 
-        var def = secDefs[overallSecScheme]
-        if (!def || !def.type) {
-          continue
-        }
-
-        var overallAuthType = def.type.toLowerCase()
-        switch (overallAuthType) {
-          case "basic":
-            basicAuthDef = overallSecScheme
-            break
-          case "apikey":
-            if (def.in === "query") {
-              apiKeyAuthDef = overallSecScheme
-            }
-            break
-          case "oauth2":
-            oauthDef = overallSecScheme
-            break
-        }
+      var authType = def.type.toLowerCase()
+      switch (authType) {
+        case "basic":
+          basicAuthDef = secScheme
+          break
+        case "apikey":
+          if (def.in === "query") {
+            apiKeyAuthDef = secScheme
+          }
+          break
+        case "oauth2":
+          oauthDef = secScheme
+          break
       }
     }
   }
