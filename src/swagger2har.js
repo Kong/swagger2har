@@ -29,18 +29,17 @@ import instantiator from "json-schema-instantiator"
  * @param  {Object} swagger           Swagger document
  * @param  {string} path              Key of the path
  * @param  {string} method            Key of the method
+ * @param  {string} baseUrl           Base URL
  * @param  {string} operation         Key of the operation
  * @param  {Object} queryParamValues  Optional: Values for the query parameters if present
  * @return {Object}                   HAR Request object
  */
 
-var createHar = function(swagger, path, method, queryParamValues) {
+var createHar = function(swagger, path, method, baseUrl, queryParamValues) {
   // if the operational parameter is not provided, set it to empty object
   if (typeof queryParamValues === "undefined") {
     queryParamValues = {}
   }
-
-  var baseUrl = getBaseUrl(swagger)
 
   var har = {
     method: method.toUpperCase(),
@@ -314,46 +313,30 @@ var getHeadersArray = function(swagger, path, method) {
  * Produces array of HAR files for given Swagger document
  *
  * @param  {object} swagger A swagger JSON document
+ * @param  {String} [selectedServer] Optional selected server to use for har
  * @param  {Function} callback
  */
-var swagger2har = function(swagger) {
+var swagger2har = function(swagger, selectedServer) {
+
   try {
     // determine basePath:
-    var baseUrl = getBaseUrl(swagger)
+    var baseUrl = selectedServer || getBaseUrl(swagger)
 
     var harList = []
     // iterate over Swagger paths and create HAR objects
-    if(swagger.openapi) {
-      Object.keys(swagger.paths).forEach(path => {
-        Object.keys(swagger.paths[path]).forEach(operation => {
-          var url = baseUrl + path
-          var har = createHar(swagger, path, operation)
-          harList.push({
-            path,
-            method: operation.toUpperCase(),
-            url: url,
-            description: swagger.paths[path][operation].description || "No description available",
-            har: har
-          })
+    Object.keys(swagger.paths).forEach(path => {
+      Object.keys(swagger.paths[path]).forEach(operation => {
+        var url = baseUrl + path
+        var har = createHar(swagger, path, operation, baseUrl)
+        harList.push({
+          path,
+          method: operation.toUpperCase(),
+          url: url,
+          description: swagger.paths[path][operation].description || "No description available",
+          har: har
         })
       })
-    } else {
-      Object.keys(swagger.paths).forEach(path => {
-        Object.keys(swagger.paths[path]).forEach(method => {
-          var url = baseUrl + path
-          var har = createHar(swagger, path, method)
-          harList.push({
-            path,
-            method: method.toUpperCase(),
-            url: url,
-            description: swagger.paths[path][method].description || "No description available",
-            har: har
-          })
-        })
-      })
-    }
-
-
+    })
 
     return harList
   } catch (e) {
