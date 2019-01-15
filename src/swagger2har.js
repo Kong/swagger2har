@@ -247,9 +247,10 @@ var getHeadersArray = function(swagger, path, method) {
     for (var k in pathObj.parameters) {
       var param = pathObj.parameters[k]
       if (typeof param.in !== "undefined" && param.in.toLowerCase() === "header") {
+        var paramType = swagger.openapi ? param.schema.type: param.type
         headers.push({
           name: param.name,
-          value: "<SOME_" + param.type.toUpperCase() + "_VALUE>"
+          value: "<SOME_" + paramType.toUpperCase() + "_VALUE>"
         })
       }
     }

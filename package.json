@@ -1,6 +1,6 @@
 {
   "name": "swagger2har",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Generate HAR objects from Swagger specs",
   "files": [
     "dist"

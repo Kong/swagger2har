@@ -41,3 +41,24 @@ test("swagger v3 YAML to JSON converts to HAR", () => {
   expect(pets.har.url).toEqual("http://petstore.swagger.io/api/pets")
   expect(pets.har.httpVersion).toEqual("HTTP/1.1")
 })
+
+test("swagger v3 JSON with header params converts to HAR", () => {
+  const spec = yaml.safeLoad(fs.readFileSync(process.cwd() + "/__tests__/header-params.json", "utf8"))
+  const HARs = swagger2Har(spec)
+  const res = HARs[0]
+
+  expect(res.har.method).toEqual("GET")
+  expect(res.har.url).toEqual("http://localhost/status/{statusId}")
+  expect(res.har.httpVersion).toEqual("HTTP/1.1")
+
+  const headers = res.har.headers
+
+  expect(headers[0].name).toEqual("accept-encoding")
+  expect(headers[0].value).toEqual("<SOME_STRING_VALUE>")
+
+  expect(headers[1].name).toEqual("user-agent")
+  expect(headers[1].value).toEqual("<SOME_STRING_VALUE>")
+
+  expect(headers[2].name).toEqual("connection")
+  expect(headers[2].value).toEqual("<SOME_STRING_VALUE>")
+})
