@@ -1,3 +1,3 @@
-import swagger2har from "./swagger2har"
+const swagger2har = require("./converter")
 
-export default swagger2har
+module.exports = swagger2har

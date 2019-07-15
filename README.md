@@ -1,4 +1,4 @@
-# swagger2har
+# oas2har
 
 Transform you Swagger OAI spec files to a series of HAR request objects.
 
@@ -8,7 +8,7 @@ Transform you Swagger OAI spec files to a series of HAR request objects.
 ## Setup
 
 ```bash
-npm install
+npm i --save @neuralegion/oas2har
 ```
 
 ## Usage
@@ -17,10 +17,10 @@ npm install
 
 Using as a ES module:
 ```js
-import swagger2har from 'swagger2har';
+import { getAll } from '@neuralegion/oas2har';
 import swaggerJSON from 'your-swagger-api.json'; // e.g. http://petstore.swagger.io/v2/swagger.json
 
-swagger2har(swaggerJSON);
+getAll(swaggerJSON);
 ```
 
 

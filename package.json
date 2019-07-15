@@ -1,39 +1,28 @@
 {
-  "name": "swagger2har",
-  "version": "0.1.2",
-  "description": "Generate HAR objects from Swagger specs",
+  "name": "@neuralegion/oas2har",
+  "version": "0.1.3",
+  "description": "Generate HAR objects from OAS",
   "files": [
-    "dist"
+    "src"
   ],
-  "main": "dist/swagger2har.js",
+  "main": "src/index.js",
   "dependencies": {
-    "json-schema-instantiator": "0.4.4",
-    "rollup-plugin-babel": "^3.0.3"
+    "openapi-sampler": "^1.0.0-beta.14"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.6.1",
-    "jest": "22.4.3",
-    "js-yaml": "^3.11.0",
+    "jest": "^24.8.0",
+    "js-yaml": "^3.13.1",
     "prettier": "^1.11.1",
-    "rollup": "^0.57.1",
-    "rollup-plugin-commonjs": "^9.1.0",
-    "rollup-plugin-filesize": "^1.5.0",
-    "rollup-plugin-json": "^2.3.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.2.0",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-uglify": "^3.0.0",
     "yaml-js": "^0.2.3"
   },
   "scripts": {
-    "build": "BABEL_ENV=production rollup --config build/rollup.config.js",
-    "test": "BABEL_ENV=test jest"
+    "test": "jest"
   },
   "keywords": [
     "swagger",
     "har",
     "json"
   ],
-  "author": "Darren Jennings",
+  "author": "Artem Derevnujk",
   "license": "MIT"
 }
