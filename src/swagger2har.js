@@ -188,28 +188,21 @@ var getQueryStrings = function(swagger, path, method, values) {
         param = resolveRef(swagger, param["$ref"])
       }
       if (typeof param.in !== "undefined" && param.in.toLowerCase() === "query") {
-        console.log("here")
-        console.log(param)
-        var schemaType = param && param.schema && param.schema.type ? param.schema.type : ""
-        console.log(schemaType)
-        var type = param && param.type ? param.type : ""
-        console.log(type)
-
         queryStrings.push({
           name: param.name,
           value:
             typeof values[param.name] === "undefined"
               ? typeof param.default === "undefined"
                 ? swagger.openapi
-                  ? "<SOME_" + schemaType.toUpperCase() + "_VALUE>"
-                  : "<SOME_" + type.toUpperCase() + "_VALUE>"
+                  ? "<SOME_" + param.schema.type.toUpperCase() + "_VALUE>"
+                  : "<SOME_" + param.type.toUpperCase() + "_VALUE>"
                 : param.default + ""
               : values[param.name] + "" /* adding a empty string to convert to string */
         })
       }
     }
   }
-  console.log(queryStrings)
+
   return queryStrings
 }
 
