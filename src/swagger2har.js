@@ -41,6 +41,10 @@ var createHar = function(swagger, path, method, baseUrl, queryParamValues) {
     queryParamValues = {}
   }
 
+  if (baseUrl[baseUrl.length - 1] === "/") {
+    baseUrl = baseUrl.slice(0, baseUrl.length - 1)
+  }
+
   var har = {
     method: method.toUpperCase(),
     url: baseUrl + path,
@@ -188,14 +192,17 @@ var getQueryStrings = function(swagger, path, method, values) {
         param = resolveRef(swagger, param["$ref"])
       }
       if (typeof param.in !== "undefined" && param.in.toLowerCase() === "query") {
+        var schemaType = param.schema && param.schema.type || ""
+        var type = param.type || ""
+
         queryStrings.push({
           name: param.name,
           value:
             typeof values[param.name] === "undefined"
               ? typeof param.default === "undefined"
                 ? swagger.openapi
-                  ? "<SOME_" + param.schema.type.toUpperCase() + "_VALUE>"
-                  : "<SOME_" + param.type.toUpperCase() + "_VALUE>"
+                  ? "<SOME_" + schemaType.toUpperCase() + "_VALUE>"
+                  : "<SOME_" + type.toUpperCase() + "_VALUE>"
                 : param.default + ""
               : values[param.name] + "" /* adding a empty string to convert to string */
         })
@@ -247,7 +254,9 @@ var getHeadersArray = function(swagger, path, method) {
     for (var k in pathObj.parameters) {
       var param = pathObj.parameters[k]
       if (typeof param.in !== "undefined" && param.in.toLowerCase() === "header") {
-        var paramType = swagger.openapi ? param.schema.type: param.type
+        var paramType = swagger.openapi ? param.schema.type : param.type
+        paramType = paramType || ""
+
         headers.push({
           name: param.name,
           value: "<SOME_" + paramType.toUpperCase() + "_VALUE>"
