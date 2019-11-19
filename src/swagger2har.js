@@ -188,6 +188,8 @@ var getQueryStrings = function(swagger, path, method, values) {
         param = resolveRef(swagger, param["$ref"])
       }
       if (typeof param.in !== "undefined" && param.in.toLowerCase() === "query") {
+        console.log("here")
+        console.log(param)
         var schemaType = param && param.schema && param.schema.type ? param.schema.type : ""
         console.log(schemaType)
         var type = param && param.type ? param.type : ""
