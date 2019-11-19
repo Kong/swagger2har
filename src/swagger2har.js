@@ -188,8 +188,10 @@ var getQueryStrings = function(swagger, path, method, values) {
         param = resolveRef(swagger, param["$ref"])
       }
       if (typeof param.in !== "undefined" && param.in.toLowerCase() === "query") {
-        var schemaType = param.schema && param.schema.type ? param.schema.type : ""
-        var type = param.type ? param.type : ""
+        var schemaType = param && param.schema && param.schema.type ? param.schema.type : ""
+        console.log(schemaType)
+        var type = param && param.type ? param.type : ""
+        console.log(type)
 
         queryStrings.push({
           name: param.name,
@@ -205,7 +207,7 @@ var getQueryStrings = function(swagger, path, method, values) {
       }
     }
   }
-
+  console.log(queryStrings)
   return queryStrings
 }
 
