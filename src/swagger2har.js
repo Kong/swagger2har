@@ -188,14 +188,17 @@ var getQueryStrings = function(swagger, path, method, values) {
         param = resolveRef(swagger, param["$ref"])
       }
       if (typeof param.in !== "undefined" && param.in.toLowerCase() === "query") {
+        var schemaType = param.schema && param.schema.type ? param.schema.type : ""
+        var type = param.type ? param.type : ""
+
         queryStrings.push({
           name: param.name,
           value:
             typeof values[param.name] === "undefined"
               ? typeof param.default === "undefined"
                 ? swagger.openapi
-                  ? "<SOME_" + param.schema.type.toUpperCase() + "_VALUE>"
-                  : "<SOME_" + param.type.toUpperCase() + "_VALUE>"
+                  ? "<SOME_" + schemaType.toUpperCase() + "_VALUE>"
+                  : "<SOME_" + type.toUpperCase() + "_VALUE>"
                 : param.default + ""
               : values[param.name] + "" /* adding a empty string to convert to string */
         })
