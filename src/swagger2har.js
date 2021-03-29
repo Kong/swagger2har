@@ -21,7 +21,7 @@
  * Source code initially pulled from: https://github.com/ErikWittern/swagger-snippet/blob/master/swagger-to-har.js
  */
 
-import instantiator from "json-schema-instantiator"
+import instantiator from 'json-schema-instantiator'
 
 /**
  * Create HAR Request object for path and method pair described in given swagger.
@@ -35,7 +35,7 @@ import instantiator from "json-schema-instantiator"
  * @return {Object}                   HAR Request object
  */
 
-var createHar = function(swagger, path, method, baseUrl, queryParamValues) {
+export function createHar(swagger, path, method, baseUrl, queryParamValues) {
   // if the operational parameter is not provided, set it to empty object
   if (typeof queryParamValues === "undefined") {
     queryParamValues = {}
@@ -45,7 +45,7 @@ var createHar = function(swagger, path, method, baseUrl, queryParamValues) {
     baseUrl = baseUrl.slice(0, baseUrl.length - 1)
   }
 
-  var har = {
+  let har = {
     method: method.toUpperCase(),
     url: baseUrl + path,
     headers: getHeadersArray(swagger, path, method),
@@ -57,7 +57,7 @@ var createHar = function(swagger, path, method, baseUrl, queryParamValues) {
   }
 
   // get payload data, if available:
-  var postData = getPayload(swagger, path, method)
+  let postData = getPayload(swagger, path, method)
   if (postData) har.postData = postData
 
   return har
@@ -73,7 +73,7 @@ var createHar = function(swagger, path, method, baseUrl, queryParamValues) {
  * @param  {string} method
  * @return {object}
  */
-var getPayload = function(swagger, path, method) {
+function getPayload(swagger, path, method) {
   if (typeof swagger.paths[path][method].parameters !== "undefined") {
     for (var i in swagger.paths[path][method].parameters) {
       var param = swagger.paths[path][method].parameters[i]
@@ -113,7 +113,7 @@ var getPayload = function(swagger, path, method) {
  * @param  {[type]} ref     [description]
  * @return {[type]}         [description]
  */
-var getResolvedSchema = function(swagger, schema) {
+function getResolvedSchema(swagger, schema) {
   if (schema.type === "object") {
     if (typeof schema.properties !== "undefined") {
       for (var propKey in schema.properties) {
@@ -145,7 +145,7 @@ var getResolvedSchema = function(swagger, schema) {
  * @param  {Object} swagger Swagger document
  * @return {string}         Base URL
  */
-var getBaseUrl = function(swagger) {
+function getBaseUrl(swagger) {
   var baseUrl = ""
 
   if (swagger.openapi) {
@@ -177,7 +177,7 @@ var getBaseUrl = function(swagger) {
  * @param  {Object} values  Optional: query parameter values to use in the snippet if present
  * @return {array}          List of objects describing the query strings
  */
-var getQueryStrings = function(swagger, path, method, values) {
+function getQueryStrings(swagger, path, method, values) {
   // Set the optional parameter if it's not provided
   if (typeof values === "undefined") {
     values = {}
@@ -222,7 +222,7 @@ var getQueryStrings = function(swagger, path, method, values) {
  * @param  {string} method  Key of the method
  * @return {array}          List of objects describing the header
  */
-var getHeadersArray = function(swagger, path, method) {
+function getHeadersArray(swagger, path, method) {
   var headers = []
 
   var pathObj = swagger.paths[path][method]
@@ -326,7 +326,7 @@ var getHeadersArray = function(swagger, path, method) {
  * @param  {String} [selectedServer] Optional selected server to use for har
  * @param  {Function} callback
  */
-var swagger2har = function(swagger, selectedServer) {
+export function swagger2Har(swagger, selectedServer) {
 
   try {
     // determine basePath:
@@ -362,12 +362,12 @@ var swagger2har = function(swagger, selectedServer) {
  * @param  {string} ref A reference string
  * @return {any}
  */
-var resolveRef = function(oai, ref) {
+function resolveRef(oai, ref) {
   var parts = ref.split("/")
 
   if (parts.length <= 1) return {} // = 3
 
-  var recursive = function(obj, index) {
+  var recursive = function (obj, index) {
     if (index + 1 < parts.length) {
       // index = 1
       var newCount = index + 1
@@ -378,5 +378,3 @@ var resolveRef = function(oai, ref) {
   }
   return recursive(oai, 1)
 }
-
-export { swagger2har, createHar}

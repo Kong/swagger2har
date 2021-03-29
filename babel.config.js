@@ -1,16 +1,16 @@
-{
+module.exports = {
   "env": {
     "test": {
       "presets": [
         [
-          "env"
+          "@babel/preset-env"
         ]
       ]
     },
     "production": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "modules": false
           }
