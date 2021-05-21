@@ -63,3 +63,18 @@ test("swagger v3 JSON with header params converts to HAR", () => {
   expect(headers[2].name).toEqual("connection")
   expect(headers[2].value).toEqual("<SOME_STRING_VALUE>")
 })
+
+test("swagger v3 JSON with $ref header params converts to HAR", () => {
+  const spec = yaml.safeLoad(fs.readFileSync(process.cwd() + "/__tests__/header-params.json", "utf8"))
+  const HARs = swagger2har(spec)
+  const res = HARs[1]
+
+  expect(res.har.method).toEqual("GET")
+  expect(res.har.url).toEqual("http://localhost/ref-header")
+  expect(res.har.httpVersion).toEqual("HTTP/1.1")
+
+  const headers = res.har.headers
+
+  expect(headers[0].name).toEqual("special-x")
+  expect(headers[0].value).toEqual("<SOME_STRING_VALUE>")
+})

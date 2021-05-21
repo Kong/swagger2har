@@ -74,6 +74,48 @@
               }
            ]
         }
+     },
+     "/ref-header":{
+      "get":{
+         "summary":"GET /ref-header",
+         "description":"Auto generated",
+         "responses":{
+            "200":{
+               "description":"desc",
+               "headers":{
+               },
+               "content":{
+                  "text/html; charset=utf-8":{
+                     "examples":{
+
+                     }
+                  }
+               }
+            }
+         },
+         "parameters":[
+            {
+               "in": "header",
+               "$ref": "#/components/parameters/testHeader"
+            },
+            {
+               "in": "header",
+               "$ref": "http://thiswillbeignored.com"
+            }
+         ]
+      }
+   }
+  },
+  "components": {
+     "parameters": {
+        "testHeader": {
+         "name":"special-x",
+         "in":"header",
+         "required":true,
+         "schema":{
+            "type":"string"
+         }
+        }
      }
   }
 }
