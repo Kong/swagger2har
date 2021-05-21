@@ -17,12 +17,20 @@ npm install
 
 Using as a ES module:
 ```js
-import swagger2har from 'swagger2har';
+import { swagger2har }  from 'swagger2har';
 import swaggerJSON from 'your-swagger-api.json'; // e.g. http://petstore.swagger.io/v2/swagger.json
 
 swagger2har(swaggerJSON);
 ```
 
+To create HAR Request object for one path and method pair described in a given swagger use createHar directly
+
+```js
+import { createHar }  from 'swagger2har';
+import swaggerJSON from 'your-swagger-api.json'; // e.g. http://petstore.swagger.io/v2/swagger.json
+
+createHar(swaggerJSON, '/pet/findByTags', 'get', 'http://petstore.swagger.io');
+```
 
 ## Testing
 
