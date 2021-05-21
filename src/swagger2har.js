@@ -370,4 +370,4 @@ var resolveRef = function(oai, ref) {
   return recursive(oai, 1)
 }
 
-export { swagger2har, createHar}
+export { swagger2har, createHar }

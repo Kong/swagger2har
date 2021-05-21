@@ -17,13 +17,11 @@ npm install
 
 Using as a ES module:
 ```js
-import swagger2har from 'swagger2har';
+import { swagger2har }  from 'swagger2har';
 import swaggerJSON from 'your-swagger-api.json'; // e.g. http://petstore.swagger.io/v2/swagger.json
 
 swagger2har(swaggerJSON);
 ```
-
-
 ## Testing
 
 ```bash
