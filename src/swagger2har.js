@@ -247,6 +247,13 @@ var getHeadersArray = function(swagger, path, method) {
     for (var k in pathObj.parameters) {
       var param = pathObj.parameters[k]
       if (typeof param.in !== "undefined" && param.in.toLowerCase() === "header") {
+        if (typeof param["$ref"] === "string") {
+          // can't handle this yet
+          if (/^http/.test(param["$ref"])) {
+            continue
+          }
+          param = resolveRef(swagger, param["$ref"])
+        }
         var paramType = swagger.openapi ? param.schema.type: param.type
         headers.push({
           name: param.name,
