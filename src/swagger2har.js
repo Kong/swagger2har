@@ -144,7 +144,7 @@ var getResolvedSchema = function(swagger, schema) {
 var getBaseUrl = function(swagger) {
   var baseUrl = ""
 
-  if (swagger.openapi) {
+  if (swagger.openapi && swagger.servers) {
     return swagger.servers[0].url
   }
 
@@ -154,10 +154,10 @@ var getBaseUrl = function(swagger) {
     baseUrl += "http"
   }
 
-  if (swagger.basePath === "/") {
+  if (swagger.basePath === "/" || !swagger.basePath) {
     baseUrl += "://" + swagger.host
   } else {
-    baseUrl += "://" + swagger.host + swagger.basePath
+    baseUrl += "://" + swagger.host
   }
 
   return baseUrl
@@ -194,7 +194,7 @@ var getQueryStrings = function(swagger, path, method, values) {
             typeof values[param.name] === "undefined"
               ? typeof param.default === "undefined"
                 ? swagger.openapi
-                  ? "<SOME_" + param.schema.type.toUpperCase() + "_VALUE>"
+                  ? "<SOME_" + (param.schema ? param.schema : { "type": "string" }).type.toUpperCase() + "_VALUE>"
                   : "<SOME_" + param.type.toUpperCase() + "_VALUE>"
                 : param.default + ""
               : values[param.name] + "" /* adding a empty string to convert to string */
