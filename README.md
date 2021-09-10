@@ -8,7 +8,7 @@ Transform you Swagger OAI spec files to a series of HAR request objects.
 ## Setup
 
 ```bash
-npm install
+yarn install
 ```
 
 ## Usage
@@ -35,5 +35,5 @@ createHar(swaggerJSON, '/pet/findByTags', 'get', 'http://petstore.swagger.io');
 ## Testing
 
 ```bash
-npm run test
+yarn test
 ```

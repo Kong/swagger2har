@@ -24,7 +24,7 @@ test("swagger v2 JSON to HAR object can be crawled", () => {
 })
 
 test("swagger v2 YAML to JSON converts to HAR", () => {
-  const vitals = yaml.safeLoad(fs.readFileSync(process.cwd() + "/__tests__/vitals.yaml", "utf8"))
+  const vitals = yaml.load(fs.readFileSync(process.cwd() + "/__tests__/vitals.yaml", "utf8"))
   const HARs = swagger2har(vitals)
   const get_cluster_stats = HARs[0]
 
@@ -34,7 +34,7 @@ test("swagger v2 YAML to JSON converts to HAR", () => {
 })
 
 test("swagger v3 YAML to JSON converts to HAR", () => {
-  const petstore = yaml.safeLoad(fs.readFileSync(process.cwd() + "/__tests__/petstore-expanded-v3.yaml", "utf8"))
+  const petstore = yaml.load(fs.readFileSync(process.cwd() + "/__tests__/petstore-expanded-v3.yaml", "utf8"))
   const HARs = swagger2har(petstore)
   const pets = HARs[0]
 
@@ -44,7 +44,7 @@ test("swagger v3 YAML to JSON converts to HAR", () => {
 })
 
 test("swagger v3 JSON with header params converts to HAR", () => {
-  const spec = yaml.safeLoad(fs.readFileSync(process.cwd() + "/__tests__/header-params.json", "utf8"))
+  const spec = yaml.load(fs.readFileSync(process.cwd() + "/__tests__/header-params.json", "utf8"))
   const HARs = swagger2har(spec)
   const res = HARs[0]
 
@@ -65,7 +65,7 @@ test("swagger v3 JSON with header params converts to HAR", () => {
 })
 
 test("swagger v3 JSON with $ref header params converts to HAR", () => {
-  const spec = yaml.safeLoad(fs.readFileSync(process.cwd() + "/__tests__/header-params.json", "utf8"))
+  const spec = yaml.load(fs.readFileSync(process.cwd() + "/__tests__/header-params.json", "utf8"))
   const HARs = swagger2har(spec)
   const res = HARs[1]
 
