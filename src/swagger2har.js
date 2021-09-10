@@ -22,6 +22,7 @@
  */
 
 import instantiator from "json-schema-instantiator"
+const JSONSchemaSampler = require('@stoplight/json-schema-sampler');
 
 /**
  * Create HAR Request object for path and method pair described in given swagger.
@@ -49,7 +50,8 @@ var createHar = function(swagger, path, method, baseUrl, queryParamValues) {
     httpVersion: "HTTP/1.1",
     cookies: [],
     headersSize: 0,
-    bodySize: 0
+    bodySize: 0,
+    comment: swagger.paths[path][method].summary,
   }
 
   // get payload data, if available:
@@ -88,9 +90,15 @@ var getPayload = function(swagger, path, method) {
           schema = getResolvedSchema(swagger, swagger.definitions[ref])
         }
 
+        var data = JSON.stringify();
+        try {
+          data = JSONSchemaSampler.sample(schema)
+        } catch (error) {
+          data = instantiator.instantiate(schema);
+        }
         return {
           mimeType: "application/json",
-          text: JSON.stringify(instantiator.instantiate(schema))
+          text: JSON.stringify(data)
         }
       }
     }
@@ -154,10 +162,10 @@ var getBaseUrl = function(swagger) {
     baseUrl += "http"
   }
 
-  if (swagger.basePath === "/" || !swagger.basePath) {
+  if (swagger.basePath === "/") {
     baseUrl += "://" + swagger.host
-  } else {
-    baseUrl += "://" + swagger.host
+  } else if (swagger.basePath) {
+    baseUrl += "://" + swagger.host + swagger.basePath
   }
 
   return baseUrl
@@ -335,7 +343,7 @@ var swagger2har = function(swagger, selectedServer) {
     Object.keys(swagger.paths).forEach(path => {
       Object.keys(swagger.paths[path]).forEach(operation => {
         var url = baseUrl + path
-        var har = createHar(swagger, path, operation, baseUrl)
+        var har = createHar(swagger, path, operation, baseUrl);
         harList.push({
           path,
           method: operation.toUpperCase(),

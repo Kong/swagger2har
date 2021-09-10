@@ -1,6 +1,6 @@
 {
-  "name": "swagger2har",
-  "version": "1.0.1",
+  "name": "dothttp-swagger2har",
+  "version": "1.0.2",
   "description": "Generate HAR objects from Swagger specs",
   "files": [
     "dist"
@@ -8,6 +8,7 @@
   "main": "dist/swagger2har.js",
   "dependencies": {
     "json-schema-instantiator": "0.4.4",
+    "@stoplight/json-schema-sampler": "^0.2.0",
     "rollup-plugin-babel": "^3.0.3"
   },
   "devDependencies": {

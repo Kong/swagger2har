@@ -1,3 +1,5 @@
+This is fork of [swagger2har](https://github.com/Kong/swagger2har/) with very minimal modifications for a certian usecase(`import swagger to dothttp`). visit https://github.com/Kong/swagger2har/
+
 # swagger2har
 
 Transform you Swagger OAI spec files to a series of HAR request objects.
