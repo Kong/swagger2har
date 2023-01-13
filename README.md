@@ -35,5 +35,5 @@ createHar(swaggerJSON, '/pet/findByTags', 'get', 'http://petstore.swagger.io');
 ## Testing
 
 ```bash
-npm run test
+yarn test
 ```
