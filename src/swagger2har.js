@@ -257,7 +257,7 @@ var getHeadersArray = function(swagger, path, method) {
         var paramType = swagger.openapi ? param.schema.type: param.type
         headers.push({
           name: param.name,
-          value: "<SOME_" + paramType.toUpperCase() + "_VALUE>"
+          value: paramType ? `<SOME_${paramType.toUpperCase()}_VALUE>` : "<SOME_VALUE>"
         })
       }
     }
