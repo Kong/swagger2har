@@ -194,8 +194,8 @@ var getQueryStrings = function(swagger, path, method, values) {
             typeof values[param.name] === "undefined"
               ? typeof param.default === "undefined"
                 ? swagger.openapi
-                  ? "<SOME_" + param.schema.type.toUpperCase() + "_VALUE>"
-                  : "<SOME_" + param.type.toUpperCase() + "_VALUE>"
+                  ? param.schema?.type ? "<SOME_" + param.schema?.type?.toUpperCase() + "_VALUE>" : "<SOME_VALUE>"
+                  : param.type ? "<SOME_" + param.type?.toUpperCase() + "_VALUE>" : "<SOME_VALUE>"
                 : param.default + ""
               : values[param.name] + "" /* adding a empty string to convert to string */
         })
