@@ -257,7 +257,7 @@ var getHeadersArray = function(swagger, path, method) {
         var paramType = swagger.openapi ? param.schema.type: param.type
         headers.push({
           name: param.name,
-          value: paramType ? `<SOME_${paramType.toUpperCase()}_VALUE>` : "<SOME_VALUE>"
+          value: paramType ? `<SOME_${paramType?.toUpperCase()}_VALUE>` : "<SOME_VALUE>"
         })
       }
     }
@@ -338,7 +338,7 @@ var swagger2har = function(swagger, selectedServer) {
         var har = createHar(swagger, path, operation, baseUrl)
         harList.push({
           path,
-          method: operation.toUpperCase(),
+          method: operation?.toUpperCase(),
           url: url,
           description: swagger.paths[path][operation].description || "No description available",
           har: har
